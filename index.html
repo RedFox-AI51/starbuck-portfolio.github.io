@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nicholas Starbuck - Systems Engineering & AI Research</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #0a1628;
+            --secondary-color: #1e3a8a;
+            --accent-color: #3b82f6;
+            --text-light: #e5e7eb;
+            --text-dark: #1f2937;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --bg-dark: #111827;
+            --bg-card: #1f2937;
+            --border-color: #374151;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--bg-dark) 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-color);
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(59,130,246,0.3)"/><circle cx="80" cy="40" r="2" fill="rgba(59,130,246,0.3)"/><circle cx="40" cy="80" r="2" fill="rgba(59,130,246,0.3)"/></svg>') repeat;
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--text-light), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+
+        .card h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Projects */
+        .project {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--accent-color);
+            transition: all 0.3s;
+        }
+
+        .project:hover {
+            border-left-color: var(--success-color);
+            transform: translateX(5px);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-type {
+            background: var(--secondary-color);
+            color: var(--text-light);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        /* Skills */
+        .skill-category {
+            margin-bottom: 3rem;
+        }
+
+        .skill-category h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .skill-item {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            transition: all 0.3s;
+        }
+
+        .skill-item:hover {
+            border-left-color: var(--success-color);
+            transform: translateX(5px);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--accent-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-left: 1rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            border: 3px solid var(--bg-dark);
+        }
+
+        .timeline-date {
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Contact */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .contact-form {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--primary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-header {
+                flex-direction: column;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mobile-nav.active {
+            display: flex;
+        }
+
+        .mobile-nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Progress bars */
+        .progress-bar {
+            background: var(--primary-color);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--success-color));
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Nicholas Starbuck</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')" class="active">Home</a></li>
+                <li><a href="#" onclick="showPage('about')">About</a></li>
+                <li><a href="#" onclick="showPage('projects')">Projects</a></li>
+                <li><a href="#" onclick="showPage('skills')">Skills</a></li>
+                <li><a href="#" onclick="showPage('experience')">Experience</a></li>
+                <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileNav()">☰</button>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#" onclick="showPage('home'); closeMobileNav()">Home</a>
+        <a href="#" onclick="showPage('about'); closeMobileNav()">About</a>
+        <a href="#" onclick="showPage('projects'); closeMobileNav()">Projects</a>
+        <a href="#" onclick="showPage('skills'); closeMobileNav()">Skills</a>
+        <a href="#" onclick="showPage('experience'); closeMobileNav()">Experience</a>
+        <a href="#" onclick="showPage('contact'); closeMobileNav()">Contact</a>
+    </div>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="container">
+            <div class="hero fade-in-up">
+                <div class="hero-content">
+                    <h1>Nicholas Starbuck</h1>
+                    <p>Systems Engineering & AI Research Student | Aspiring Defense Innovation Leader</p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <div class="stat-number">6'2"</div>
+                            <div class="stat-label">Physical Readiness</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">5AM</div>
+                            <div class="stat-label">Daily Start</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">Year 11</div>
+                            <div class="stat-label">Academic Level</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">ADFA</div>
+                            <div class="stat-label">Target University</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h2>Core Competencies</h2>
+                <p>Specialized expertise in systems architecture, AI engineering, and biomimetic robotics</p>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>🧠 AI Systems Architecture</h3>
+                    <p>Advanced experience in neural network design, optimization, and deployment. Specialized in creating observability platforms for AI systems with real-time monitoring and fault tolerance.</p>
+                </div>
+                <div class="card">
+                    <h3>🤖 Biomimetic Robotics</h3>
+                    <p>Innovative approach to robotics inspired by biological systems. Developing heart-inspired fluid pumps and humanoid platforms with natural movement patterns.</p>
+                </div>
+                <div class="card">
+                    <h3>⚡ Systems Engineering</h3>
+                    <p>Enterprise-level engineering practices applied to personal projects. Focus on reliability, scalability, and maintainable architectures with comprehensive monitoring.</p>
+                </div>
+                <div class="card">
+                    <h3>🛡️ Defense Applications</h3>
+                    <p>Strategic focus on military-grade AI systems and critical infrastructure. Preparing for contributions to Australia's technological sovereignty and defense capabilities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+        <div class="container">
+            <div class="section-header">
+                <h2>About Me</h2>
+                <p>Dedicated to excellence in systems engineering and military service</p>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>🎯 Mission</h3>
+                    <p>To contribute to Australia's defense capability through high-integrity systems design and leadership, combining cutting-edge AI research with military discipline and strategic thinking.</p>
+                </div>
+                <div class="card">
+                    <h3>⚖️ Values</h3>
+                    <p>Integrity, discipline, innovation, and service. Committed to maintaining the highest standards in both personal conduct and technical excellence, following a military-inspired daily routine.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Academic Excellence</h3>
+                <p>Currently excelling as a Year 11 student in advanced sciences and mathematics, maintaining a rigorous academic schedule while pursuing complex independent research projects. My approach combines first-principles thinking with cross-disciplinary integration.</p>
+                
+                <h4 style="color: var(--accent-color); margin: 2rem 0 1rem 0;">Current Subjects</h4>
+                <div class="skills-grid">
+                    <div class="skill-item">Chemistry</div>
+                    <div class="skill-item">Biology</div>
+                    <div class="skill-item">Physics</div>
+                    <div class="skill-item">Advanced Mathematics</div>
+                    <div class="skill-item">Software Engineering</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Physical & Mental Discipline</h3>
+                <p>Maintaining a strict military-style routine from 5:00 AM to 9:00 PM, balancing academic excellence with physical conditioning and technical project development. At 6'2", actively preparing to meet ADF physical standards.</p>
+                
+                <h4 style="color: var(--accent-color); margin: 2rem 0 1rem 0;">Daily Structure</h4>
+                <ul style="margin-left: 2rem; line-height: 2;">
+                    <li>5:00 AM - Physical training and preparation</li>
+                    <li>6:00 AM - Advanced project work and research</li>
+                    <li>8:00 AM - Academic studies and coursework</li>
+                    <li>2:00 PM - Technical development and coding</li>
+                    <li>6:00 PM - Strategic planning and documentation</li>
+                    <li>9:00 PM - Rest and recovery</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Leadership Philosophy</h3>
+                <p>Believing in leading by example, I apply enterprise-level engineering practices to personal projects and maintain professional standards in all endeavors. My approach emphasizes collaboration while taking personal responsibility for outcomes.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Page -->
+    <div id="projects" class="page">
+        <div class="container">
+            <div class="section-header">
+                <h2>Technical Projects</h2>
+                <p>Innovative solutions spanning AI systems, robotics, and bioengineering</p>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <div>
+                        <div class="project-title">Ollama Enhanced Reporter</div>
+                        <div class="project-type">AI Observability Platform</div>
+                    </div>
+                </div>
+                <p>Engineered a comprehensive monitoring solution for local AI systems using Prometheus metrics with multi-platform alerting capabilities. The system provides real-time notifications through Discord and Telegram, ensuring immediate awareness of system health issues.</p>
+                
+                <h4 style="color: var(--accent-color); margin: 1.5rem 0 1rem 0;">Key Features:</h4>
+                <ul style="margin-left: 2rem; line-height: 1.8;">
+                    <li>Fault-tolerant architecture with automated failover mechanisms</li>
+                    <li>Real-time system health monitoring and alerting</li>
+                    <li>Multi-platform notification integration</li>
+                    <li>Comprehensive metrics collection and analysis</li>
+                </ul>
+
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Prometheus</span>
+                    <span class="tech-tag">Docker</span>
+                    <span class="tech-tag">API Integration</span>
+                    <span class="tech-tag">Systems Monitoring</span>
+                </div>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <div>
+                        <div class="project-title">MyoMotive Biomimetic Pump System</div>
+                        <div class="project-type">Bioengineering Innovation</div>
+                    </div>
+                </div>
+                <p>Revolutionary heart-inspired fluid pump system utilizing electromagnetic actuation and soft robotics principles. This breakthrough design integrates thermoelectric generators for waste-heat energy harvesting and features silent operation protocols suitable for stealth applications.</p>
+                
+                <h4 style="color: var(--accent-color); margin: 1.5rem 0 1rem 0;">Applications:</h4>
+                <ul style="margin-left: 2rem; line-height: 1.8;">
+                    <li>Advanced robotics fluid circulation systems</li>
+                    <li>Medical device applications</li>
+                    <li>Military stealth systems</li>
+                    <li>Energy-efficient industrial pumping</li>
+                </ul>
+
+                <div class="tech-tags">
+                    <span class="tech-tag">Biomimicry</span>
+                    <span class="tech-tag">Electromagnetic Actuation</span>
+                    <span class="tech-tag">Soft Robotics</span>
+                    <span class="tech-tag">Energy Harvesting</span>
+                    <span class="tech-tag">Silent Operation</span>
+                </div>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <div>
+                        <div class="project-title">MYRA Humanoid Platform</div>
+                        <div class="project-type">Advanced Robotics</div>
+                    </div>
+                </div>
+                <p>Comprehensive humanoid robot platform integrated with the MyoMotive circulation system, featuring biomimetic control systems for natural movement patterns and AI-driven autonomous decision-making capabilities.</p>
+                
+                <h4 style="color: var(--accent-color); margin: 1.5rem 0 1rem 0;">Focus Areas:</h4>
+                <ul style="margin-left: 2rem; line-height: 1.8;">
+                    <li>Human-Robot Interaction protocols</li>
+                    <li>Autonomous decision-making systems</li>
+                    <li>Biomechanical movement optimization</li>
+                    <li>Integrated circulation and power systems</li>
+                </ul>
+
+                <div class="tech-tags">
+                    <span class="tech-tag">Humanoid Robotics</span>
+                    <span class="tech-tag">AI Control Systems</span>
+                    <span class="tech-tag">Biomechanics</span>
+                    <span class="tech-tag">Autonomous Navigation</span>
+                </div>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <div>
+                        <div class="project-title">Advanced Research Portfolio</div>
+                        <div class="project-type">Independent Research</div>
+                    </div>
+                </div>
+                <p>Collection of cutting-edge research projects exploring the frontiers of AI, quantum computing, and bioengineering. Each project pushes the boundaries of current technology while maintaining practical applications.</p>
+                
+                <h4 style="color: var(--accent-color); margin: 1.5rem 0 1rem 0;">Research Areas:</h4>
+                <ul style="margin-left: 2rem; line-height: 1.8;">
+                    <li><strong>Synthetic Brain Architecture:</strong> Modular cortex-like computing with custom mini-CPUs/GPUs</li>
+                    <li><strong>Quantum-Enhanced NEAT:</strong> Quantum-inspired neural network evolution</li>
+                    <li><strong>Medical AI (RSNA Challenge):</strong> EfficientNet-based aneurysm detection</li>
+                    <li><strong>Distributed Computing:</strong> Local compute cluster development</li>
+                </ul>
+
+                <div class="tech-tags">
+                    <span class="tech-tag">Quantum Computing</span>
+                    <span class="tech-tag">Neural Architecture</span>
+                    <span class="tech-tag">Medical AI</span>
+                    <span class="tech-tag">Distributed Systems</span>
+                    <span class="tech-tag">Custom Hardware</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Page -->
+    <div id="skills" class="page">
+        <div class="container">
+            <div class="section-header">
+                <h2>Technical Skills</h2>
+                <p>Comprehensive expertise across multiple engineering disciplines</p>
+            </div>
+
+            <div class="skill-category">
+                <h3>Programming & Development</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <strong>Python</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>C++</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>JavaScript</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>CUDA</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Shader Languages</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>AI/ML & Data Science</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <strong>PyTorch</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>TensorFlow</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Computer Vision</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 88%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Neural Architecture Design</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Systems & Infrastructure</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <strong>Docker & Containerization</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Prometheus Monitoring</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Linux Administration</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Distributed Computing</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Hardware & Electronics</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <strong>PCB Design</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Embedded Systems</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Sensor Integration</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 78%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <strong>Control Systems</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 82%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Specialized Domains</h3>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🔐 Cybersecurity</h3>
+                        <ul style="margin-left: 1rem; line-height: 1.8;">
+                            <li>System Monitoring & Threat Detection</li>
+                            <li>Security Architecture Design</li>
+                            <li>Incident Response Protocols</li>
+                            <li>Vulnerability Assessment</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>🤖 Robotics Engineering</h3>
+                        <ul style="margin-left: 1rem; line-height: 1.8;">
+                            <li>Biomimetic Design Principles</li>
+                            <li>Advanced Control Systems</li>
+                            <li>Multi-sensor Fusion</li>
+                            <li>Autonomous Navigation</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>🧬 Bioengineering</h3>
+                        <ul style="margin-left: 1rem; line-height: 1.8;">
+                            <li>Biomimicry Applications</li>
+                            <li>Medical Device Design</li>
+                            <li>Physiological Modeling</li>
+                            <li>Bio-inspired Materials</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>⚛️ Quantum Computing</h3>
+                        <ul style="margin-left: 1rem; line-height: 1.8;">
+                            <li>Quantum-Inspired Algorithms</li>
+                            <li>Quantum Logic Simulation</li>
+                            <li>Hybrid Classical-Quantum Systems</li>
+                            <li>Quantum Optimization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Experience Page -->
+    <div id="experience" class="page">
+        <div class="container">
+            <div class="section-header">
+                <h2>Experience & Goals</h2>
+                <p>Strategic career development aligned with defense innovation</p>
+            </div>
+
+            <h3 style="color: var(--accent-color); margin-bottom: 2rem;">Career Roadmap</h3>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2024-2026</div>
+                    <h4 style="color: var(--accent-color); margin-bottom: 1rem;">Immediate Goals</h4>
+                    <ul style="margin-left: 1rem; line-height: 1.8;">
+                        <li>Excel in Year 11-12 advanced sciences and mathematics</li>
+                        <li>Complete MyoMotive and MYRA prototype development</li>
+                        <li>Finalize local compute cluster and distributed AI system</li>
+                        <li>Achieve ADFA admission requirements</li>
+                        <li>Maintain physical conditioning to ADF standards</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">2026-2030</div>
+                    <h4 style="color: var(--accent-color); margin-bottom: 1rem;">Medium-Term Aspirations</h4>
+                    <ul style="margin-left: 1rem; line-height: 1.8;">
+                        <li><strong>Australian Defence Force Academy:</strong> Electrical Engineering degree</li>
+                        <li><strong>Military Specialization:</strong> Weapons Systems & Electrical Engineering Officer track</li>
+                        <li><strong>Advanced Projects:</strong> Military-grade AI systems and critical infrastructure</li>
+                        <li><strong>Leadership Development:</strong> Team-based defense technology projects</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">2030+</div>
+                    <h4 style="color: var(--accent-color); margin-bottom: 1rem;">Long-Term Vision</h4>
+                    <ul style="margin-left: 1rem; line-height: 1.8;">
+                        <li><strong>Defense Innovation:</strong> Lead high-integrity AI and robotics systems</li>
+                        <li><strong>Research Leadership:</strong> Pioneer hybrid bio-inspired AI architectures</li>
+                        <li><strong>Strategic Impact:</strong> Contribute to Australia's technological sovereignty</li>
+                        <li><strong>Professional Excellence:</strong> Bridge innovation with military engineering</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card-grid" style="margin-top: 3rem;">
+                <div class="card">
+                    <h3>🎯 Professional Development</h3>
+                    <p>Currently participating in remote Software Engineering sessions and maintaining a disciplined self-directed learning approach. Focus on first-principles understanding and cross-disciplinary integration.</p>
+                </div>
+                <div class="card">
+                    <h3>💪 Physical Readiness</h3>
+                    <p>At 6'2", actively working on strength and endurance conditioning in preparation for ADF standards. Maintaining military-style daily routine from 5:00 AM to 9:00 PM.</p>
+                </div>
+                <div class="card">
+                    <h3>🛡️ Security Clearance</h3>
+                    <p>Eligible for Australian government security clearance. Committed to maintaining the highest standards of integrity and reliability required for defense applications.</p>
+                </div>
+                <div class="card">
+                    <h3>🌏 Strategic Focus</h3>
+                    <p>Dedicated to contributing to Australia's defense capability and technological sovereignty through innovative engineering solutions and principled leadership.</p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Distinguishing Characteristics</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem;">
+                    <div>
+                        <h4 style="color: var(--accent-color); margin-bottom: 1rem;">Technical Innovation</h4>
+                        <ul style="line-height: 1.8;">
+                            <li>Systems-first architectural thinking</li>
+                            <li>Biomimetic engineering specialization</li>
+                            <li>AI acceleration expertise</li>
+                            <li>Hardware-software-biology integration</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--accent-color); margin-bottom: 1rem;">Professional Readiness</h4>
+                        <ul style="line-height: 1.8;">
+                            <li>Military mindset and discipline</li>
+                            <li>Engineering rigor and reliability focus</li>
+                            <li>Continuous learning adaptability</li>
+                            <li>Strategic alignment with national security</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <div class="container">
+            <div class="section-header">
+                <h2>Contact Information</h2>
+                <p>Ready to contribute to Australia's defense innovation</p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3 style="color: var(--accent-color); margin-bottom: 2rem;">Get In Touch</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div>
+                            <strong>Email</strong><br>
+                            <a href="mailto:ninjanickwhite@gmail.com" style="color: var(--accent-color);">ninjanickwhite@gmail.com</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📱</div>
+                        <div>
+                            <strong>Phone</strong><br>
+                            <span>+61 0467 172 236</span>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">🌍</div>
+                        <div>
+                            <strong>Location</strong><br>
+                            <span>Australia</span>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">💻</div>
+                        <div>
+                            <strong>GitHub</strong><br>
+                            <a href="https://github.com/RedFox-AI51" style="color: var(--accent-color);" target="_blank">RedFox-AI51</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">🌐</div>
+                        <div>
+                            <strong>Portfolio</strong><br>
+                            <a href="https://redfox-ai51.github.io/" style="color: var(--accent-color);" target="_blank">redfox-ai51.github.io</a>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 3rem; padding: 1.5rem; background: var(--primary-color); border-radius: 10px; border-left: 4px solid var(--success-color);">
+                        <h4 style="color: var(--success-color); margin-bottom: 1rem;">Available For:</h4>
+                        <ul style="line-height: 1.8;">
+                            <li>Technical collaboration projects</li>
+                            <li>Research partnerships</li>
+                            <li>Defense industry opportunities</li>
+                            <li>Academic mentorship</li>
+                            <li>Engineering consulting</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h3 style="color: var(--accent-color); margin-bottom: 2rem;">Send Message</h3>
+                    <form id="contactForm" onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="organization">Organization (Optional)</label>
+                            <input type="text" id="organization" name="organization">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; text-align: center; padding: 2rem; background: var(--bg-card); border-radius: 15px;">
+                <h3 style="color: var(--accent-color); margin-bottom: 1rem;">Professional References</h3>
+                <p>Comprehensive technical documentation and project demonstrations available via GitHub portfolio. Academic and project references available upon request.</p>
+                <div style="margin-top: 1rem;">
+                    <span style="background: var(--primary-color); padding: 0.5rem 1rem; border-radius: 20px; margin: 0 0.5rem;">Security Clearance Eligible</span>
+                    <span style="background: var(--secondary-color); padding: 0.5rem 1rem; border-radius: 20px; margin: 0 0.5rem;">ADFA Ready</span>
+                    <span style="background: var(--success-color); padding: 0.5rem 1rem; border-radius: 20px; margin: 0 0.5rem; color: white;">Available Immediately</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update nav links
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Add active class to clicked link
+            const activeLink = document.querySelector(`[onclick="showPage('${pageId}')"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+
+            // Add fade-in animation
+            document.getElementById(pageId).classList.add('fade-in-up');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Mobile navigation
+        function toggleMobileNav() {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.toggle('active');
+        }
+
+        function closeMobileNav() {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.remove('active');
+        }
+
+        // Form handling
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Simulate form submission
+            alert('Thank you for your message! I will get back to you soon.');
+            
+            // Reset form
+            event.target.reset();
+            
+            return false;
+        }
+
+        // Animate progress bars when skills page is viewed
+        function animateProgressBars() {
+            const progressFills = document.querySelectorAll('.progress-fill');
+            progressFills.forEach(fill => {
+                const width = fill.style.width;
+                fill.style.width = '0%';
+                setTimeout(() => {
+                    fill.style.width = width;
+                }, 100);
+            });
+        }
+
+        // Initialize animations when skills page is shown
+        const originalShowPage = showPage;
+        showPage = function(pageId) {
+            originalShowPage(pageId);
+            if (pageId === 'skills') {
+                setTimeout(animateProgressBars, 200);
+            }
+        };
+
+        // Smooth scrolling for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth scroll behavior
+            document.documentElement.style.scrollBehavior = 'smooth';
+            
+            // Initialize progress bars animation on load if on skills page
+            if (document.getElementById('skills').classList.contains('active')) {
+                animateProgressBars();
+            }
+            
+            // Close mobile nav when clicking outside
+            document.addEventListener('click', function(event) {
+                const mobileNav = document.getElementById('mobileNav');
+                const menuBtn = document.querySelector('.mobile-menu-btn');
+                
+                if (!mobileNav.contains(event.target) && !menuBtn.contains(event.target)) {
+                    closeMobileNav();
+                }
+            });
+        });
+
+        // Add typing effect to hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Initialize typing effect on load
+        window.addEventListener('load', function() {
+            const heroTitle = document.querySelector('.hero h1');
+            if (heroTitle) {
+                typeWriter(heroTitle, 'Nicholas Starbuck', 150);
+            }
+        });
+    </script>
+</body>
+</html>
